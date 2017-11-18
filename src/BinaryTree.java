@@ -43,6 +43,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         size++;
         return true;
     }
+
     boolean checkInvariant() {
         return root == null || checkInvariant(root);
     }
@@ -52,10 +53,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         if (left != null && (left.value.compareTo(node.value) >= 0 || !checkInvariant(left))) return false;
         Node<T> right = node.right;
         return right == null || right.value.compareTo(node.value) > 0 && checkInvariant(right);
-    }
-
-    private void delete(T delValue) {
-        root = deleteRec(root, delValue);
     }
 
     private Node<T> deleteRec(Node<T> node, T delValue) {
@@ -81,6 +78,10 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         }
         return node;
     }
+    private void delete(T delValue) {
+        root = deleteRec(root, delValue);
+    }
+
     Node<T> minValue(Node<T> node)
     {
         if (node.left == null)
@@ -97,6 +98,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         }
         return false;
     }
+
+
 
     @Override
     public boolean contains(Object o) {
@@ -124,37 +127,47 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         }
     }
 
+
     public class BinaryTreeIterator implements Iterator<T> {
-        private Node<T> current = null;
-        private Queue<Node<T>> nodes;
-        private Node<T> node;
+
+        private Node<T> current;
+        private Stack<Node<T>> nodes;
+        private int count;
 
         private BinaryTreeIterator() {
-            nodes = new ArrayDeque<>();
-            nodes.add(root);
-        }
-        private Node<T> findNext() {
-            if (nodes.isEmpty())
-                return null;
-            else {
-                node = nodes.poll();
-                if (node.left != null)
-                    nodes.add(node.left);
-                if (node.right != null)
-                    nodes.add(node.right);
+            current = null;
+            nodes = new Stack<>();
+            count = 0;
+            Node<T> node = root;
+            while (node != null) {
+                nodes.push(node);
+                node = node.left;
             }
-            size--;
+        }
+
+        private Node<T> findNext() {
+            if (nodes.empty()) return null;
+            Node<T> node = nodes.pop();
+
+            if (node.right != null) {
+                Node<T> nodeNext = node.right;
+                while (nodeNext != null) {
+                    nodes.push(nodeNext);
+                    nodeNext = nodeNext.left;
+                }
+            }
+            count++;
             return node;
         }
 
         @Override
         public boolean hasNext() {
-            return findNext() != null;
+            return !(count==size);
         }
 
         @Override
         public T next() {
-            current = findNext();
+            if (hasNext()) current = findNext();
             if (current == null) throw new NoSuchElementException();
             return current.value;
         }
@@ -186,7 +199,6 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
     @NotNull
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
-
         throw new UnsupportedOperationException();
     }
 

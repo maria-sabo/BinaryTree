@@ -1,23 +1,56 @@
 import org.junit.Test;
 
-import java.util.Iterator;
+import javax.xml.soap.Node;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class BinaryTreeTest {
+
+    @Test
+    public void remove31()  {
+        BinaryTree<Integer> tree = new BinaryTree<>();
+        List<Integer> list1 = Arrays.asList(57, 93, 58, 53, 22, 81, 8, 45, 21, 11, 42, 64, 62, 79, 59, 92, 36, 30, 15, 31);
+        tree.addAll(list1);
+        ArrayList<Integer> list2 = new ArrayList<>();
+        ArrayList<Integer> list3 = new ArrayList<>();
+        Iterator<Integer> iterator = tree.iterator();
+
+        while (iterator.hasNext()) {list2.add(iterator.next());}
+        Collections.sort(list1);
+        assertEquals(list2.size(), tree.size());
+        assertEquals(list1, list2);
+
+        tree.remove(31);
+        assertTrue(!tree.contains(31));
+
+       // Iterator<Integer> iterator2 = tree.iterator();
+      //  while (iterator2.hasNext()) {list3.add(iterator.next());}
+
+
+
+
+    }
+
     @Test
     public void hasNext() throws Exception {
         BinaryTree<Integer> tree = new BinaryTree<>();
         tree.add(50);
+        tree.add(60);
+
         Iterator<Integer> iterator = tree.iterator();
         assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
         assertTrue(!iterator.hasNext());
+
+
     }
 
     @Test
     public void next() throws Exception {
         BinaryTree<Integer> tree = new BinaryTree<>();
+
         tree.add(50);
         tree.add(40);
         tree.add(70);
@@ -27,18 +60,17 @@ public class BinaryTreeTest {
         tree.add(80);
 
         Iterator<Integer> iterator = tree.iterator();
-        assertTrue(iterator.hasNext());
-        assertEquals((int) iterator.next(), 40);
-        assertEquals((int) iterator.next(), 70);
         assertEquals((int) iterator.next(), 20);
+        assertEquals((int) iterator.next(), 40);
         assertEquals((int) iterator.next(), 45);
+        assertEquals((int) iterator.next(), 50);
         assertEquals((int) iterator.next(), 60);
+        assertEquals((int) iterator.next(), 70);
         assertEquals((int) iterator.next(), 80);
-        assertTrue(!iterator.hasNext());
     }
 
     @Test
-    public void remove(){
+    public void remove() {
         BinaryTree<Integer> tree1 = new BinaryTree<>();
         tree1.add(40);
         tree1.add(30);
