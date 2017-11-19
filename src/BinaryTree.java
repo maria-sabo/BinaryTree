@@ -78,15 +78,15 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         }
         return node;
     }
-    private void delete(T delValue) {
-        root = deleteRec(root, delValue);
+
+    Node<T> minValue(Node<T> node) {
+        if (node.left == null)
+            return node;
+        else return minValue(node.left);
     }
 
-    Node<T> minValue(Node<T> node)
-    {
-        if (node.left == null)
-            return  node;
-        else return minValue(node.left);
+    private void delete(T delValue) {
+        root = deleteRec(root, delValue);
     }
 
     @Override
@@ -95,10 +95,8 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
             delete((T) o);
             size--;
             return true;
-        }
-        return false;
+        } else return false;
     }
-
 
 
     @Override
@@ -137,7 +135,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         private BinaryTreeIterator() {
             current = null;
             nodes = new Stack<>();
-            count = 0;
+            count = size + 1;
             Node<T> node = root;
             while (node != null) {
                 nodes.push(node);
@@ -156,18 +154,18 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                     nodeNext = nodeNext.left;
                 }
             }
-            count++;
             return node;
         }
 
         @Override
         public boolean hasNext() {
-            return !(count==size);
+            count--;
+            return !(count == 0);
         }
 
         @Override
         public T next() {
-            if (hasNext()) current = findNext();
+            current = findNext();
             if (current == null) throw new NoSuchElementException();
             return current.value;
         }

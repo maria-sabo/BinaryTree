@@ -15,9 +15,11 @@ public class BinaryTreeTest {
         tree.addAll(list1);
         ArrayList<Integer> list2 = new ArrayList<>();
         ArrayList<Integer> list3 = new ArrayList<>();
-        Iterator<Integer> iterator = tree.iterator();
+        ArrayList<Integer> list4 = new ArrayList<>();
 
+        Iterator<Integer> iterator = tree.iterator();
         while (iterator.hasNext()) {list2.add(iterator.next());}
+
         Collections.sort(list1);
         assertEquals(list2.size(), tree.size());
         assertEquals(list1, list2);
@@ -25,12 +27,13 @@ public class BinaryTreeTest {
         tree.remove(31);
         assertTrue(!tree.contains(31));
 
-       // Iterator<Integer> iterator2 = tree.iterator();
-      //  while (iterator2.hasNext()) {list3.add(iterator.next());}
+        list4.addAll(tree);
+        Iterator<Integer> iterator2 = tree.iterator();
+        while (iterator2.hasNext()) {list3.add(iterator2.next());}
 
-
-
-
+        Collections.sort(list4);
+        assertEquals(list3.size(), tree.size());
+        assertEquals(list4, list3);
     }
 
     @Test
@@ -40,11 +43,10 @@ public class BinaryTreeTest {
         tree.add(60);
 
         Iterator<Integer> iterator = tree.iterator();
+
         assertTrue(iterator.hasNext());
         assertTrue(iterator.hasNext());
         assertTrue(!iterator.hasNext());
-
-
     }
 
     @Test
